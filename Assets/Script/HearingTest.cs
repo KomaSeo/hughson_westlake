@@ -21,7 +21,7 @@ public class HearingTest : MonoBehaviour
     TestPhase testPhase = TestPhase.idle;
     float volumeAtStep0 = 40;
     float stepMultiplier = 5; // change 5db per step
-    float currentFrequency = 500;
+    [SerializeField]float currentFrequency = 500;
     float inputWaitTimer = 0f;
     float intervalTimer = 0f;
     bool isDetected = false;
