@@ -1,15 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class SoundPlayerTest : MonoBehaviour
+using EXP.Sound;
+namespace EXP.ScriptTest
 {
-    [SerializeField] SoundPlayer soundPlayer;
-    [SerializeField] float volume;
-    [SerializeField] float frequency;
-    [SerializeField] float duration;
-    public void PlaySound()
+    public class SoundPlayerTest : MonoBehaviour
     {
-        soundPlayer.PlaySound(frequency, duration, volume);
+        [SerializeField] SoundPlayer soundPlayer;
+        [SerializeField] float volume;
+        [SerializeField] float frequency;
+        [SerializeField] float duration;
+        public void PlaySound()
+        {
+            soundPlayer.PlaySound(frequency, duration, volume, false);
+        }
     }
+
+
 }

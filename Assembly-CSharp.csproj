@@ -64,10 +64,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Script\HearingTest.cs" />
-    <Compile Include="Assets\Script\Hughson_westlake.cs" />
-    <Compile Include="Assets\Script\SineWaveGenerator.cs" />
-    <Compile Include="Assets\Script\SoundPlayer.cs" />
+    <Compile Include="Assets\Script\FileIO\CsvReader.cs" />
+    <Compile Include="Assets\Script\FileIO\CsvWriter.cs" />
+    <Compile Include="Assets\Script\FileIO\FileChecker.cs" />
+    <Compile Include="Assets\Script\FileIO\TableBuilder.cs" />
+    <Compile Include="Assets\Script\HearingTest\HearingTest.cs" />
+    <Compile Include="Assets\Script\HearingTest\Hughson_westlake.cs" />
+    <Compile Include="Assets\Script\HearingTest\SingleHearingTest.cs" />
+    <Compile Include="Assets\Script\HearingTest\TestSelectionPanel.cs" />
+    <Compile Include="Assets\Script\Sound\SineWaveGenerator.cs" />
+    <Compile Include="Assets\Script\Sound\SoundCalibrator.cs" />
+    <Compile Include="Assets\Script\Sound\SoundPlayer.cs" />
+    <Compile Include="Assets\Script\TestScript\CsvTest.cs" />
     <Compile Include="Assets\Script\TestScript\SoundPlayerTest.cs" />
     <Compile Include="Assets\Script\Timer.cs" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

@@ -4,5 +4,20 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/HearingTest.unity
+    guid: 9f9d8695e5731fa43bbbb37f6a2d301b
+  - enabled: 1
+    path: Assets/Scenes/CalibrationScene.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/SingleHearingTest.unity
+    guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/TestScene/CsvTest.unity
+    guid: 41fa7b6c0e4e2ee43a662056539b6f2f
+  - enabled: 1
+    path: Assets/Scenes/TestScene/SoundPlayTest.unity
+    guid: af99b431ee4e0db4ebf876147b14e6b3
   m_configObjects: {}
