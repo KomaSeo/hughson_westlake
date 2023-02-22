@@ -708,6 +708,7 @@ MonoBehaviour:
   calibrationList:
   - 500
   - 1000
+  - 2000
   soundPlayer: {fileID: 963194229}
   frequencyInfo: {fileID: 1617706280}
   inputField: {fileID: 1140905272}

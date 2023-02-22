@@ -8,10 +8,12 @@ using TMPro;
 using EXP.Sound;
 public class SingleHearingTest : MonoBehaviour
 {
+    string participantName;
     [SerializeField] SoundPlayer soundPlayer;
     [SerializeField] Image soundImage;
     [SerializeField] Image detectImage;
     [SerializeField] Image inputImage;
+    [SerializeField] TextMeshProUGUI interfaceSettingText;
     [SerializeField] TextMeshProUGUI volumeText;
     [SerializeField] TextMeshProUGUI frequencyText;
     [SerializeField] TextMeshProUGUI resultText;
@@ -19,6 +21,7 @@ public class SingleHearingTest : MonoBehaviour
     [SerializeField] float inputWaitTime = 2f;
     [SerializeField] float intervalTime = 2f;
     [SerializeField] Hughson_westlake algorithm;
+    [SerializeField] TestCondition testCondition;
     TestPhase testPhase = TestPhase.idle;
     float volumeAtStep0 = 40;
     float stepMultiplier = 5; // change 5db per step
@@ -36,9 +39,11 @@ public class SingleHearingTest : MonoBehaviour
         trialInterval,
         End
     }
-    public void InitializeTest(float frequency)
+    public void InitializeTest(string participantName, float frequency, TestCondition condition)
     {
+        this.participantName = participantName;
         currentFrequency = frequency;
+        testCondition = condition;
     }
     public void AddStartListener(UnityAction action)
     {
@@ -61,11 +66,45 @@ public class SingleHearingTest : MonoBehaviour
             ChangeState(TestPhase.inputWait);
         });
     }
-
-    private void Update()
+    private void UpdateTexts()
     {
         volumeText.text = "Current Volume : " + GetVolume().ToString();
         frequencyText.text = "Current frequency : " + currentFrequency.ToString();
+        string settingText = "N/A";
+        float volumeDifference;
+        switch (testCondition){
+            case TestCondition.ACV:
+                settingText = "ACV ON\n BCV OFF";
+                break;
+            case TestCondition.BcvWith2PoleNoise_ACV:
+                settingText = "ACV ON\n 2 Pole Noisy BCV ON\n";
+                break;
+            case TestCondition.BcvWith2PoleNative:
+                settingText = "Mute ACV\n 4 Pole Native BCV ON\n";
+                volumeDifference = BcvCalibrationFinder.FindCalibrationDifference(participantName, currentFrequency, false);
+                settingText += "Set BCV volume difference as " + volumeDifference.ToString() + "dB with ACV";
+                break;
+            case TestCondition.BcvWith4PoleNative:
+                settingText = "Mute ACV\n 4 Pole Native BCV ON\n";
+                volumeDifference = BcvCalibrationFinder.FindCalibrationDifference(participantName, currentFrequency, false);
+                settingText += "Set BCV volume difference as " + volumeDifference.ToString() + "dB with ACV";
+                break;
+            case TestCondition.BcvWith2PoleNative_ACV:
+                settingText = "ACV ON\n 2 Pole Native BCV ON\n";
+                volumeDifference = BcvCalibrationFinder.FindCalibrationDifference(participantName, currentFrequency, true);
+                settingText += "Set BCV volume difference as " + volumeDifference.ToString() + "dB with ACV";
+                break;
+            default:
+                Debug.LogWarning("There is unexpected test condition! Please add instruction.");
+                break;
+
+        }
+        interfaceSettingText.text = settingText;
+    }
+
+    private void Update()
+    {
+        UpdateTexts();
         detectImage.enabled = isDetected;
         switch (testPhase)
         {
@@ -132,7 +171,29 @@ public class SingleHearingTest : MonoBehaviour
     }
     private float GetVolume()
     {
-        return algorithm.currentStepValue * stepMultiplier + volumeAtStep0;
+        float offset = 0f;
+        switch (testCondition)
+        {
+            case TestCondition.ACV:
+                offset = 0f;
+                break;
+            case TestCondition.BcvWith2PoleNoise_ACV:
+                offset = 0f;
+                break;
+            case TestCondition.BcvWith2PoleNative_ACV:
+                offset = -10f * Mathf.Log10(2f);//half of sound volume.
+                break;
+            case TestCondition.BcvWith4PoleNative:
+                offset = 0f;
+                break;
+            case TestCondition.BcvWith2PoleNative:
+                offset = 0f;
+                break;
+            default:
+                Debug.LogWarning("Not considered in condition for volume offset");
+                break;
+        }
+        return algorithm.currentStepValue * stepMultiplier + volumeAtStep0 + offset;
     }
     private bool DetectInput()
     {

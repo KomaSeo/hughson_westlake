@@ -257,13 +257,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db7d957f98e5d56428799e744f5da528, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  participantName: Test
+  participantName: test
   participantNameText: {fileID: 250213577}
   buttonPanel: {fileID: 1024474183}
   experimentInfoText: {fileID: 984425485}
-  experimentList:
+  frequencyList:
   - 500
   - 1000
+  - 2000
   singleHearingTestScenePath: Assets/Scenes/SingleHearingTest.unity
   hearingTestScenePath: Assets/Scenes/HearingTest.unity
 --- !u!4 &1007674561
@@ -560,6 +561,23 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 6787737847530657571, guid: 2ab67d9962e72f8429a3cac588176f53,
+        type: 3}
+      propertyPath: m_text
+      value: 'ExperimentList
+
+'
+      objectReference: {fileID: 0}
+    - target: {fileID: 6787737847530657571, guid: 2ab67d9962e72f8429a3cac588176f53,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 6787737847530657571, guid: 2ab67d9962e72f8429a3cac588176f53,
+        type: 3}
+      propertyPath: m_fontSizeBase
+      value: 18
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2ab67d9962e72f8429a3cac588176f53, type: 3}
