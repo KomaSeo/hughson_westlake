@@ -77,22 +77,24 @@ public class SingleHearingTest : MonoBehaviour
                 settingText = "ACV ON\n BCV OFF";
                 break;
             case TestCondition.BcvWith2PoleNoise_ACV:
-                settingText = "ACV ON\n 2 Pole Noisy BCV ON\n";
+                settingText = "ACV ON\nMastoid Noisy BCV ON\nCondyle BCV OFF\n";
                 break;
             case TestCondition.BcvWith2PoleNative:
-                settingText = "Mute ACV\n 4 Pole Native BCV ON\n";
-                volumeDifference = BcvCalibrationFinder.FindCalibrationDifference(participantName, currentFrequency, false);
-                settingText += "Set BCV volume difference as " + volumeDifference.ToString() + "dB with ACV";
+                settingText = "ACV OFF\nMastoid BCV ON \nCondyle BCV OFF\n";
+                volumeDifference = BcvCalibrationFinder.FindCalibrationDifference(participantName, currentFrequency, true);
+                settingText += "Set Mastoid BCV volume difference" + volumeDifference.ToString() + "dB.";
                 break;
             case TestCondition.BcvWith4PoleNative:
-                settingText = "Mute ACV\n 4 Pole Native BCV ON\n";
+                settingText = "ACV OFF\nMastoid BCV ON \nCondyle BCV ON\n";
+                volumeDifference = BcvCalibrationFinder.FindCalibrationDifference(participantName, currentFrequency, true);
+                settingText += "Set Mastoid BCV volume difference" + volumeDifference.ToString() + "dB.\n";
                 volumeDifference = BcvCalibrationFinder.FindCalibrationDifference(participantName, currentFrequency, false);
-                settingText += "Set BCV volume difference as " + volumeDifference.ToString() + "dB with ACV";
+                settingText += "Set Condyle BCV volume difference" + volumeDifference.ToString() + "dB.";
                 break;
             case TestCondition.BcvWith2PoleNative_ACV:
-                settingText = "ACV ON\n 2 Pole Native BCV ON\n";
+                settingText = "ACV ON\nMastoid BCV ON \nCondyle BCV OFF\n";
                 volumeDifference = BcvCalibrationFinder.FindCalibrationDifference(participantName, currentFrequency, true);
-                settingText += "Set BCV volume difference as " + volumeDifference.ToString() + "dB with ACV";
+                settingText += "Set Mastoid BCV volume difference" + volumeDifference.ToString() + "dB.";
                 break;
             default:
                 Debug.LogWarning("There is unexpected test condition! Please add instruction.");
@@ -149,7 +151,7 @@ public class SingleHearingTest : MonoBehaviour
             case TestPhase.idle:
                 break;
             case TestPhase.soundPlay:
-                soundPlayer.PlaySound(currentFrequency, soundTime, GetVolume(),true);
+                soundPlayer.PlaySound(currentFrequency, soundTime, GetVolume() + GetOffset(),true);
                 break;
             case TestPhase.inputWait:
                 inputWaitTimer = 0f;
@@ -171,6 +173,11 @@ public class SingleHearingTest : MonoBehaviour
     }
     private float GetVolume()
     {
+        return algorithm.currentStepValue * stepMultiplier + volumeAtStep0;
+    }
+
+    private float GetOffset()
+    {
         float offset = 0f;
         switch (testCondition)
         {
@@ -184,7 +191,7 @@ public class SingleHearingTest : MonoBehaviour
                 offset = -10f * Mathf.Log10(2f);//half of sound volume.
                 break;
             case TestCondition.BcvWith4PoleNative:
-                offset = 0f;
+                offset = -10f * Mathf.Log10(3f);//1/3 of each sound volume.
                 break;
             case TestCondition.BcvWith2PoleNative:
                 offset = 0f;
@@ -193,8 +200,10 @@ public class SingleHearingTest : MonoBehaviour
                 Debug.LogWarning("Not considered in condition for volume offset");
                 break;
         }
-        return algorithm.currentStepValue * stepMultiplier + volumeAtStep0 + offset;
+
+        return offset;
     }
+
     private bool DetectInput()
     {
         bool hasInput = Input.GetKey(KeyCode.Space);

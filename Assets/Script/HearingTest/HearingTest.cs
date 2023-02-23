@@ -86,10 +86,26 @@ public class HearingTest : MonoBehaviour
     public void SaveTest()
     {
         TableBuilder builder = new TableBuilder(TableBuilder.AddMode.column);
-        builder.Add("frequency + condition", "decibel");
-        foreach(var result in resultList)
+        string[] column = new string[frequencyList.Count + 1];
+        column[0] = "frequency/condition";
+        for(int i = 1; i <= frequencyList.Count; i++)
         {
-            builder.Add(result.Item1, result.Item2);
+            column[i] = frequencyList[i-1].ToString();
+        }
+        builder.Add(column);
+        foreach(TestCondition condition in System.Enum.GetValues(typeof(TestCondition)))
+        {
+            string[] conditionColumn = new string[frequencyList.Count + 1];
+            conditionColumn[0] = condition.ToString();
+            for (int i = 1; i <= frequencyList.Count; i++)
+            {
+                conditionColumn[i] = resultList.Find(
+                (match) =>
+                {
+                    return isConditionEqual(match, (frequencyList[i-1], condition));
+                }).Item2.ToString();
+            }
+            builder.Add(conditionColumn);
         }
         string[,] table = builder.GetTable();
         CsvWriter.WriteCSV(table, "./experimentResult/" + participantName + ".csv");
@@ -106,10 +122,7 @@ public class HearingTest : MonoBehaviour
             if(resultList.Exists(
                 (match)=>
                 {
-                    var resultCondition = match.Item1;
-                    var frequency = resultCondition.Item1;
-                    var condition = resultCondition.Item2;
-                    return condition == testTarget.Item2 && frequency == testTarget.Item1;
+                    return isConditionEqual(match, testTarget);
                 }
                 ) )
             {
@@ -118,6 +131,15 @@ public class HearingTest : MonoBehaviour
             newButton.transform.SetParent(buttonPanel.transform);
         }
     }
+
+    private static bool isConditionEqual(((float, TestCondition), float) condition1, (float, TestCondition) condition2)
+    {
+        var resultCondition = condition1.Item1;
+        var frequency = resultCondition.Item1;
+        var condition = resultCondition.Item2;
+        return condition == condition2.Item2 && frequency == condition2.Item1;
+    }
+
     private void UpdateInfo()
     {
         participantNameText.text = participantName;

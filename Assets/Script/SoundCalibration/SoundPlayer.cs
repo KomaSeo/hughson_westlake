@@ -81,7 +81,7 @@ namespace EXP.Sound
 
         private void SetFrequency(float frequency)
         {
-            audioPlayer.clip = SineWaveGenerator.MakeSound(frequency);
+            audioPlayer.clip = SineWaveGenerator.MakeSound(500f);
             float audio_frequency_ratio = frequency / 500f;
             audioPlayer.pitch = audio_frequency_ratio;
         }

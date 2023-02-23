@@ -30,7 +30,14 @@ public class TableBuilder
             {
                 addMatrix = (opposeIndex, currentIndex);
             }
-            tableDictionary.Add(addMatrix, cell.ToString());
+            if(cell == null)
+            {
+                tableDictionary.Add(addMatrix, "NULL");
+            }
+            else
+            {
+                tableDictionary.Add(addMatrix, cell.ToString());
+            }
             opposeIndex++;
         }
         currentIndex++;

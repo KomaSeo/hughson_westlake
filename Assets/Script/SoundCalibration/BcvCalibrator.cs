@@ -15,7 +15,7 @@ namespace EXP.Sound
         private static string mCalibrationFileSuffix = "BcvSoundCalibration.csv";
         [SerializeField] string participantName;
         [SerializeField] private List<float> frequencyList = new List<float>();
-        [SerializeField] private List<(float, bool)> calibrationList = new List<(float, bool)>();//frequency, is2Pole
+        [SerializeField] private List<(float, bool)> calibrationList = new List<(float, bool)>();//frequency, isMastoid
         private List<float> calibrationResult;
         [SerializeField] private SoundPlayer soundPlayer;
         [SerializeField] private TextMeshProUGUI frequencyInfo;
@@ -47,8 +47,9 @@ namespace EXP.Sound
         {
             var currentCalibration = calibrationList[countIndex];
             float currentFrequency = currentCalibration.Item1;
-            bool is2Pole = currentCalibration.Item2;
-            frequencyInfo.text = "Current frequency : " + currentFrequency.ToString() + "  \n2pole : " + is2Pole.ToString();
+            bool isMastoid = currentCalibration.Item2;
+            string testTarget = isMastoid ? "mastoid" : "condyle";
+            frequencyInfo.text = "Current frequency : " + currentFrequency.ToString() + "  \nTarget : " + testTarget;
             participantNameInfo.text = "Current Participant : " + participantName;
             soundPlayer.PlaySound(currentFrequency, float.MaxValue, 50, true);
             isCalibrating = true;
@@ -93,10 +94,10 @@ namespace EXP.Sound
             CsvWriter.WriteCSV(Table2Pole.GetTable(), GetCalibrationFilePath(participantName,true));
             CsvWriter.WriteCSV(Table4Pole.GetTable(), GetCalibrationFilePath(participantName,false));
         }
-        public static string GetCalibrationFilePath(string participantName, bool is2Pole)
+        public static string GetCalibrationFilePath(string participantName, bool isMastoid)
         {
-            string pole = is2Pole ? "2pole" : "4pole";
-            return "./" + participantName + pole + calibrationFileSuffix;
+            string pole = isMastoid ? "Mastoid" : "Condyle";
+            return "./BcvCalibration/" + participantName + pole + calibrationFileSuffix;
         }
 
         private void StoreResult()
@@ -108,12 +109,12 @@ namespace EXP.Sound
     }
     public class BcvCalibrationFinder
     {
-        public static float FindCalibrationDifference(string participantName, float frequency, bool is2Pole)
+        public static float FindCalibrationDifference(string participantName, float frequency, bool isMastoid)
         {
-            string bcvCalibrationPath = BcvCalibrator.GetCalibrationFilePath(participantName,is2Pole);
+            string bcvCalibrationPath = BcvCalibrator.GetCalibrationFilePath(participantName,isMastoid);
             var result = CsvReader.ReadCSV(bcvCalibrationPath);
             int matchingIndex = -1;
-            for(int index = 0; index < result[0].Length; index++)
+             for(int index = 0; index < result[0].Length; index++)
             {
                 bool isMatching = result[0][index].Equals(frequency.ToString());
                 if (isMatching){

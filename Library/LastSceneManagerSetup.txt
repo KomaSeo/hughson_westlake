@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Scenes/HearingTest.unity
+- path: Assets/Scenes/BcvCalibrationScene.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0
