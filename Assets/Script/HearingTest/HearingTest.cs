@@ -99,11 +99,14 @@ public class HearingTest : MonoBehaviour
             conditionColumn[0] = condition.ToString();
             for (int i = 1; i <= frequencyList.Count; i++)
             {
-                conditionColumn[i] = resultList.Find(
-                (match) =>
+                if (resultList.Exists((match) => { return isConditionEqual(match, (frequencyList[i - 1], condition)); }))
                 {
-                    return isConditionEqual(match, (frequencyList[i-1], condition));
-                }).Item2.ToString();
+                    conditionColumn[i] = resultList.Find((match) =>{return isConditionEqual(match, (frequencyList[i - 1], condition));}).Item2.ToString();
+                }
+                else
+                {
+                    conditionColumn[i] = "NULL";
+                }
             }
             builder.Add(conditionColumn);
         }

@@ -232,7 +232,7 @@ public class SingleHearingTest : MonoBehaviour
         {
             tableBuilder.Add(ConvertStepToVolume(logInfo.Item1), logInfo.Item2);
         }
-        string dateTimePattern = "yyyy_MM_dd_H_mm";
+        string dateTimePattern = "yyyy_MM_dd_H_mm_ss";
         CsvWriter.WriteCSV(tableBuilder.GetTable(), "./logs/" + fileSuffix + DateTime.Now.ToString(dateTimePattern) + "_" + currentFrequency + "hz.csv");
     }
 
