@@ -191,7 +191,7 @@ public class SingleHearingTest : MonoBehaviour
                 offset = -10f * Mathf.Log10(2f);//half of sound volume.
                 break;
             case TestCondition.BcvWith4PoleNative:
-                offset = -10f * Mathf.Log10(3f);//1/3 of each sound volume.
+                offset = -10f * Mathf.Log10(2f);//half of each sound volume.
                 break;
             case TestCondition.BcvWith2PoleNative:
                 offset = 0f;

@@ -1301,9 +1301,9 @@ MonoBehaviour:
   volumeText: {fileID: 198649259}
   frequencyText: {fileID: 1130250844}
   resultText: {fileID: 895525631}
-  soundTime: 1
-  inputWaitTime: 1
-  intervalTime: 0
+  soundTime: 2
+  inputWaitTime: 2
+  intervalTime: 2
   algorithm: {fileID: 1786595777}
   testCondition: 0
   currentFrequency: 500

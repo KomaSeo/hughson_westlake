@@ -71,7 +71,12 @@ public class HearingTest : MonoBehaviour
             test.GetLog(participantName);
             if (test.IsTestEndNomally())
             {
-                resultList.Add(((frequency,condition), test.GetThershold()));
+                if(resultList.Exists(GetPredicate((frequency, condition))))
+                {
+                    var prevResult = resultList.Find(GetPredicate((frequency, condition)));
+                    resultList.Remove(prevResult);
+                }
+                resultList.Add(((frequency, condition), test.GetThershold()));
             }
             else
             {
@@ -99,9 +104,9 @@ public class HearingTest : MonoBehaviour
             conditionColumn[0] = condition.ToString();
             for (int i = 1; i <= frequencyList.Count; i++)
             {
-                if (resultList.Exists((match) => { return isConditionEqual(match, (frequencyList[i - 1], condition)); }))
+                if (resultList.Exists(GetPredicate((frequencyList[i-1],condition))))
                 {
-                    conditionColumn[i] = resultList.Find((match) =>{return isConditionEqual(match, (frequencyList[i - 1], condition));}).Item2.ToString();
+                    conditionColumn[i] = resultList.Find(GetPredicate((frequencyList[i - 1], condition))).Item2.ToString();
                 }
                 else
                 {
@@ -113,6 +118,10 @@ public class HearingTest : MonoBehaviour
         string[,] table = builder.GetTable();
         CsvWriter.WriteCSV(table, "./experimentResult/" + participantName + ".csv");
     }
+    Predicate<((float, TestCondition),float)> GetPredicate((float,TestCondition) match)
+    {
+        return (x) => { return isConditionEqual(x, match); };
+    }
     private void AddTestButtons()
     {
         foreach(var testTarget in experimentList_)
@@ -122,12 +131,7 @@ public class HearingTest : MonoBehaviour
             buttonComponent.onClick.AddListener(() => LoadTest(testTarget.Item1,testTarget.Item2));
             TextMeshProUGUI buttonText = newButton.AddComponent<TextMeshProUGUI>();
             buttonText.text = testTarget.Item1.ToString() + "hz_" + testTarget.Item2.ToString();
-            if(resultList.Exists(
-                (match)=>
-                {
-                    return isConditionEqual(match, testTarget);
-                }
-                ) )
+            if (resultList.Exists(GetPredicate(testTarget)))
             {
                 buttonText.color = Color.black;
             }
