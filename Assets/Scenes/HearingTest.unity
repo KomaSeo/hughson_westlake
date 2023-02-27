@@ -262,9 +262,13 @@ MonoBehaviour:
   buttonPanel: {fileID: 1024474183}
   experimentInfoText: {fileID: 984425485}
   frequencyList:
+  - 125
+  - 250
   - 500
   - 1000
   - 2000
+  - 4000
+  - 8000
   singleHearingTestScenePath: Assets/Scenes/SingleHearingTest.unity
   hearingTestScenePath: Assets/Scenes/HearingTest.unity
 --- !u!4 &1007674561
@@ -611,8 +615,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6787737847530657571, guid: 2ab67d9962e72f8429a3cac588176f53,
         type: 3}
+      propertyPath: m_fontSizeMax
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 6787737847530657571, guid: 2ab67d9962e72f8429a3cac588176f53,
+        type: 3}
+      propertyPath: m_fontSizeMin
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6787737847530657571, guid: 2ab67d9962e72f8429a3cac588176f53,
+        type: 3}
       propertyPath: m_fontSizeBase
       value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 6787737847530657571, guid: 2ab67d9962e72f8429a3cac588176f53,
+        type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8027213037522716279, guid: 2ab67d9962e72f8429a3cac588176f53,
         type: 3}

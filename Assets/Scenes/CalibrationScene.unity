@@ -706,9 +706,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   calibrationList:
+  - 125
+  - 250
   - 500
   - 1000
   - 2000
+  - 4000
+  - 8000
   soundPlayer: {fileID: 963194229}
   frequencyInfo: {fileID: 1617706280}
   inputField: {fileID: 1140905272}

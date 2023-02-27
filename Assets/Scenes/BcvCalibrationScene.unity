@@ -1566,9 +1566,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   participantName: test
   frequencyList:
+  - 125
+  - 250
   - 500
   - 1000
   - 2000
+  - 4000
+  - 8000
   soundPlayer: {fileID: 2135507283}
   frequencyInfo: {fileID: 1888284161}
   participantNameInfo: {fileID: 8997170}

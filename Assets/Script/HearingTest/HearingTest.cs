@@ -131,6 +131,7 @@ public class HearingTest : MonoBehaviour
             buttonComponent.onClick.AddListener(() => LoadTest(testTarget.Item1,testTarget.Item2));
             TextMeshProUGUI buttonText = newButton.AddComponent<TextMeshProUGUI>();
             buttonText.text = testTarget.Item1.ToString() + "hz_" + testTarget.Item2.ToString();
+            buttonText.enableAutoSizing = true;
             if (resultList.Exists(GetPredicate(testTarget)))
             {
                 buttonText.color = Color.black;
