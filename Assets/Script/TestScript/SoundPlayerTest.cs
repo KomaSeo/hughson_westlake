@@ -12,7 +12,7 @@ namespace EXP.ScriptTest
         [SerializeField] float duration;
         public void PlaySound()
         {
-            soundPlayer.PlaySound(frequency, duration, volume, false);
+            soundPlayer.PlaySound(frequency, duration, volume, true);
         }
     }
 
