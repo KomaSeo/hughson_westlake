@@ -51,7 +51,7 @@ namespace EXP.Sound
             string testTarget = isMastoid ? "mastoid" : "condyle";
             frequencyInfo.text = "Current frequency : " + currentFrequency.ToString() + "  \nTarget : " + testTarget;
             participantNameInfo.text = "Current Participant : " + participantName;
-            soundPlayer.PlaySound(currentFrequency, float.MaxValue, 65, true);
+            soundPlayer.PlaySound(currentFrequency, float.MaxValue, 50f, true);
             isCalibrating = true;
         }
         public void SubmitResult()
