@@ -59,7 +59,7 @@ namespace EXP.Sound
             if (isCalibrating)
             {
                 StoreResult();
-                soundPlayer.stopSound();
+                soundPlayer.stopSoundWithSmoothing();
                 countIndex++;
                 if (countIndex < calibrationList.Count)
                 {

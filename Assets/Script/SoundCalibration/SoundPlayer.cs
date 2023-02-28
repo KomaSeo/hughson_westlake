@@ -13,6 +13,7 @@ namespace EXP.Sound
         [SerializeField] float MaxSoundVolume = 60;
         UnityEvent soundStart = new UnityEvent();
         UnityEvent soundEnd = new UnityEvent();
+        float smoothingTime = 0.3f;
 
         Timer audioTimer;
         private void Awake()
@@ -32,6 +33,16 @@ namespace EXP.Sound
         }
         public void PlaySound(float frequency, float duration, float dbVolume, bool useCalibration)
         {
+            SetMaxVolume(frequency, useCalibration);
+            SetFrequency(frequency);
+            SetVolume(dbVolume);
+            SetDuration(duration);
+            StartSoundWithSmoothing();
+            soundStart.Invoke();
+        }
+
+        private void SetMaxVolume(float frequency, bool useCalibration)
+        {
             if (useCalibration)
             {
                 string[][] frequencyInfo = CsvReader.ReadCSV(SoundCalibrator.calibrationFilePath);
@@ -45,30 +56,46 @@ namespace EXP.Sound
                     MaxSoundVolume = int.Parse(frequencyInfo[1][arr]);
                 }
             }
-            SetFrequency(frequency);
-            SetVolume(dbVolume);
-            SetDuration(duration);
-            StartSound();
-            soundStart.Invoke();
         }
+
         public void PlaySoundOnRatio(float frequency, float duration, float linearVolume)
         {
             SetFrequency(frequency);
             SetVolume(MaxSoundVolume);
             SetDuration(duration);
-            StartSound();
+            StartSoundWithSmoothing();
             soundStart.Invoke();
         }
-        private void StartSound()
+        private IEnumerator SoundFadeIn()
         {
             audioPlayer.Play();
-            audioTimer.startTimer();
+            float targetVolume = audioPlayer.volume;
+            for (float time = 0f; time <= smoothingTime;)
+            {
+                audioPlayer.volume = time / smoothingTime * targetVolume;
+                yield return null;
+                time += Time.deltaTime;
+            }
+            audioPlayer.volume = targetVolume;
+        }
+        private IEnumerator SoundFadeOut()
+        {
+            float startVolume = audioPlayer.volume;
+            for (float time = 0f; time <= smoothingTime;)
+            {
+                audioPlayer.volume = startVolume - time / smoothingTime * startVolume;
+                yield return null;
+                time += Time.deltaTime;
+            }
+            audioPlayer.volume = 0;
+            audioPlayer.Stop();
+            soundEnd.Invoke();
 
         }
         private void SetDuration(float duration)
         {
-            audioTimer.Initialize(duration);
-            audioTimer.AddExpireListener(stopSound);
+            audioTimer.Initialize(duration - smoothingTime);
+            audioTimer.AddExpireListener(stopSoundWithSmoothing);
         }
 
         private void SetVolume(float dbVolume)
@@ -86,11 +113,16 @@ namespace EXP.Sound
             audioPlayer.pitch = audio_frequency_ratio;
         }
 
-        public void stopSound()
+        private void StartSoundWithSmoothing()
+        {
+            audioTimer.startTimer();
+            StartCoroutine(SoundFadeIn());
+
+        }
+        public void stopSoundWithSmoothing()
         {
             audioTimer.Initialize(0);
-            audioPlayer.Stop();
-            soundEnd.Invoke();
+            Coroutine fadeoutCoroutine = StartCoroutine(SoundFadeOut());
         }
         private float LinearToDecibel(float linear)
         {
